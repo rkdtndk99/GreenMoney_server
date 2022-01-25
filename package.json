@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start" : "nodemon npx babel-node server/init.js",
+    "start": "nodemon npx babel-node server/init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,9 +19,10 @@
   "homepage": "https://github.com/rkdtndk99/GreenMoney_server#readme",
   "dependencies": {
     "babel-loader": "^8.2.2",
+    "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.7",
-    "express": "^4.17.2"
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.15.4",

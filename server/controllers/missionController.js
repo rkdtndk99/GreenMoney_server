@@ -1,7 +1,7 @@
 import Mission from "../models/Mission.js";
 import Parent from "../models/Parent.js";
 import Child from "../models/Child.js";
-
+import moment from "moment";
 //로그인하면 client local Storage에 jwt token, isParent저장
 //isParent => 1이면 부모, 0이면 자식
 //password local storage에 저장할 때 암호화해서 저장
@@ -12,19 +12,18 @@ export const loadMission = async (req, res) => {
     // var base64Url = token.split('.')[1];
     // var base64 = base64Url.replace('-', '+').replace('_', '/');
     // const email = JSON.parse(atob(base64)).email
+    
+    const yearMonth = moment().format('YYYY-MM')
 
     if(isParent){
         const user = await Parent.find({email:email});
-        const mission = await Mission.find({_id: user[0].missionId});
-        console.log(mission[0].askForConfirm,
-            mission[0].completed);
+        const mission = await Mission.find({_id: user[0].missionId, date: {$regex: new RegExp(`${yearMonth}`) }});
         res.json(mission);
     }
     else{
         const user = await Child.find({email:email});
-        const mission = await Mission.find({_id: user[0].missionId});
+        const mission = await Mission.find({_id: user[0].missionId, date: {$regex: new RegExp(`${yearMonth}`) }});
         res.json(mission);
-        
     }
     // client 측에서 mission 받아서 뿌려줄 때 mission 마다 _id 값도 저장해놓아야
     // 버튼눌러서 확인요청 주고 받을 때 그 mission지정 가능
@@ -64,5 +63,6 @@ export const confirmMission = async (req,res) => {
     res.send("success");
 }   
 // verifyToken을 통해 검증된 후 진행
+
 
 

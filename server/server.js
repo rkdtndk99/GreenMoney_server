@@ -1,11 +1,11 @@
 import express from "express";
-import rootRouter from "./routers/rootRouter.js";
+import missionRouter from "./routers/missionRouter.js";
 
 const app = express();
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-app.use("/", rootRouter);
+app.use("/mission", missionRouter);
 
 export default app;
