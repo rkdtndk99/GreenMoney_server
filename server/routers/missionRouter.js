@@ -1,10 +1,11 @@
 import express from "express";
-import {loadMission, askForConfirm,confirmMission, getPercent
+import {loadMonthMission, askForConfirm,confirmMission, getPercent, loadAllMission
 } from "../controllers/missionController.js";
 
 const missionRouter = express.Router();
 
-missionRouter.post("/loadMission", loadMission);
+missionRouter.post("/loadMonthMission", loadMonthMission);
+missionRouter.post("/loadAllMission", loadAllMission);
 missionRouter.post("/askForConfirm", askForConfirm);
 missionRouter.post("/confirmMission", confirmMission);
 missionRouter.post("/getPercent", getPercent);

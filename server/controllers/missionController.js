@@ -17,13 +17,25 @@ function calculateMoney(mission){
     return earned
 }
 
+function checkMonth(mission){
+    var month = new Set();
+    
+    const length = mission.length
+    for(var i = 0; i<length; i++ ){
+        var missionMonth = mission[i].date.split('-')[0] + '-' + mission[i].date.split('-')[1]
+        month.add(missionMonth)
+    }
+    console.log(month)
+    return month
+}
+
 
 //로그인하면 client local Storage에 jwt token, isParent저장
 //isParent => 1이면 부모, 0이면 자식
 //password local storage에 저장할 때 암호화해서 저장
 //mission저장할때 date정보 Mission에 date default에 있는걸로 저장할 것
 
-export const loadMission = async (req, res) => {
+export const loadMonthMission = async (req, res) => {
     const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
     //email => token
     // var base64Url = token.split('.')[1];
@@ -47,6 +59,31 @@ export const loadMission = async (req, res) => {
     // client 측에서 mission의 completed와 askForConfirm에 따라 ui 다르게 구성
 }
 
+
+export const loadAllMission = async (req, res) => {
+    const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
+    //email => token
+    // var base64Url = token.split('.')[1];
+    // var base64 = base64Url.replace('-', '+').replace('_', '/');
+    // const email = JSON.parse(atob(base64)).email
+
+    if(isParent){
+        const user = await Parent.find({email:email});  
+        const mission = await Mission.find({parentId: user[0]._id});
+        const setMonth = checkMonth(mission);
+        const month = JSON.stringify([...setMonth]);
+        res.json({month,mission});
+    }
+    else{
+        const user = await Child.find({email:email});
+        const mission = await Mission.find({childId: user[0]._id });
+        const setMonth = checkMonth(mission);
+        const month = JSON.stringify([...setMonth]);
+        res.json({month,mission});
+    }
+}
+
+
 export const askForConfirm = async (req,res) => {
     
     const {id} = req.body; //해당 mission의 _id 받아옴
@@ -64,6 +101,7 @@ export const askForConfirm = async (req,res) => {
 }   
 // verifyToken을 통해 검증된 후 진행
 
+
 export const confirmMission = async (req,res) => {
     
     const {id} = req.body; //해당 mission의 _id 받아옴
@@ -80,6 +118,7 @@ export const confirmMission = async (req,res) => {
     res.send("success");
 }   
 // verifyToken을 통해 검증된 후 진행
+
 
 export const getPercent = async (req,res) => {
 
@@ -101,6 +140,5 @@ export const getPercent = async (req,res) => {
         const percent = calculateMoney(mission)/pin[0].max
         res.send(String(percent));
     }
-
 }
 
