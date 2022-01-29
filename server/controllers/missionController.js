@@ -1,10 +1,27 @@
 import Mission from "../models/Mission.js";
 import Parent from "../models/Parent.js";
 import Child from "../models/Child.js";
+import Pin from "../models/Pin.js";
 import moment from "moment";
+
+
+function calculateMoney(mission){
+    let earned = 0
+    const length = mission.length
+    for(let i = 0; i<length; i++ ){
+        if(mission[i].completed == 1){
+            earned += mission[i].compensation
+        }
+    }
+    console.log("earned:", earned);
+    return earned
+}
+
+
 //로그인하면 client local Storage에 jwt token, isParent저장
 //isParent => 1이면 부모, 0이면 자식
 //password local storage에 저장할 때 암호화해서 저장
+//mission저장할때 date정보 Mission에 date default에 있는걸로 저장할 것
 
 export const loadMission = async (req, res) => {
     const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
@@ -17,12 +34,12 @@ export const loadMission = async (req, res) => {
 
     if(isParent){
         const user = await Parent.find({email:email});
-        const mission = await Mission.find({_id: user[0].missionId, date: {$regex: new RegExp(`${yearMonth}`) }});
+        const mission = await Mission.find({parentId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
         res.json(mission);
     }
     else{
         const user = await Child.find({email:email});
-        const mission = await Mission.find({_id: user[0].missionId, date: {$regex: new RegExp(`${yearMonth}`) }});
+        const mission = await Mission.find({childId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
         res.json(mission);
     }
     // client 측에서 mission 받아서 뿌려줄 때 mission 마다 _id 값도 저장해놓아야
@@ -64,5 +81,26 @@ export const confirmMission = async (req,res) => {
 }   
 // verifyToken을 통해 검증된 후 진행
 
+export const getPercent = async (req,res) => {
 
+    const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
+    
+    const yearMonth = moment().format('YYYY-MM')
+
+    if(isParent){
+        const user = await Parent.find({email:email});
+        const pin = await Pin.find({parentId: user[0]._id });
+        const mission = await Mission.find({parentId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
+        const percent = calculateMoney(mission)/pin[0].max
+        res.send(String(percent));
+    }
+    else{
+        const user = await Child.find({email:email});
+        const pin = await Pin.find({childId: user[0]._id });
+        const mission = await Mission.find({childId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});   
+        const percent = calculateMoney(mission)/pin[0].max
+        res.send(String(percent));
+    }
+
+}
 

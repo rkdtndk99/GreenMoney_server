@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/gagreen",{
+mongoose.connect("mongodb://127.0.0.1:27017/gag",{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
