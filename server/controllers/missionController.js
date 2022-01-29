@@ -1,8 +1,8 @@
 import Mission from "../models/Mission.js";
 import Parent from "../models/Parent.js";
 import Child from "../models/Child.js";
-import Pin from "../models/Pin.js";
 import moment from "moment";
+import Money from "../models/Money.js";
 
 
 function calculateMoney(mission){
@@ -128,16 +128,17 @@ export const getPercent = async (req,res) => {
 
     if(isParent){
         const user = await Parent.find({email:email});
-        const pin = await Pin.find({parentId: user[0]._id });
+        const money = await Money.find({parentId: user[0]._id });
         const mission = await Mission.find({parentId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
-        const percent = calculateMoney(mission)/pin[0].max
+        const percent = calculateMoney(mission)/money[0].maxMoney
+        console.log(money);
         res.send(String(percent));
     }
     else{
         const user = await Child.find({email:email});
-        const pin = await Pin.find({childId: user[0]._id });
+        const money = await Money.find({childId: user[0]._id });
         const mission = await Mission.find({childId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});   
-        const percent = calculateMoney(mission)/pin[0].max
+        const percent = calculateMoney(mission)/money[0].maxMoney
         res.send(String(percent));
     }
 }
