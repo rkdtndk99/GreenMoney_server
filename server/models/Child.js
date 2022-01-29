@@ -5,8 +5,7 @@ const childSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     phonenumber: {type: String, required: true},
-    parentEmail: {type: String},
-    mission: {type: mongoose.Schema.Types.ObjectId, ref: "Mission"}
+    parentEmail: {type: String}
 })
 
 const Child = mongoose.model('Child', childSchema);
