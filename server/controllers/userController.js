@@ -1,50 +1,76 @@
 import Parent from "../models/Parent.js"
 import Child from "../models/Child.js"
+import jwt from "jsonwebtoken"
+import {secretKey} from "../config/secret.js"
+
 
 export const postParentJoin = async(req, res) => {
     const {name, email, pw, verifypw, phonenumber, childEmail} = req.body; 
     if (pw != verifypw){
-        return res.status(409).send({error : 'db failure'});
+        return res.send('FAIL : 비밀번호 오류');
     }
     else{
         const parentEmailExists = await Parent.exists({email});
         if(parentEmailExists){
-            console.log('이미 가입된 이메일')
+            res.send('FAIL : 이미 가입된 이메일')
         } 
         else{
             try{
                 await Parent.create({
                     name, email, password : pw, phonenumber, childEmail
                 });
-                console.log('db에 회원정보 저장 성공')
+                res.send('SUCCESS : parent join 정보 저장 성공');
             }catch(error){
-                console.log('db에 회원정보 저장 실패')
+                res.send('FAIL : parent join 정보 저장 실패');
             }
         }
-        res.send('Parent Join OK')
     }
 }
 
 export const postChildJoin = async(req, res) => {
     const {name, email, pw, verifypw, phonenumber, parentEmail} = req.body; 
     if (pw != verifypw){
-        return res.status(409).send({error : 'db failure'});
+        return res.send('FAIL : 비밀번호 오류');
     }
     else{
         const childEmailExists = await Child.exists({email});
         if(childEmailExists){
-            console.log('이미 가입된 이메일')
+            res.send('FAIL : 이미 가입된 이메일')
         } 
         else{
             try{
                 await Child.create({
                     name, email, password : pw, phonenumber, parentEmail
                 });
-                console.log('db에 회원정보 저장 성공')
+                res.send('SUCCESS : child join 정보 저장 성공');
             }catch(error){
-                console.log('db에 회원정보 저장 실패')
+                res.send('FAIL : child join 정보 저장 실패');
             }
         }
-        res.send('Child Join OK')
+    }
+}
+
+export const parentLogin = async(req, res, next) => {
+    const{email, pw} = req.body;
+    const parentEmailExists = await Parent.exists({email});
+    if(parentEmailExists){
+        const user_p = await Parent.find({email : email});
+        if(user_p[0].password == pw){
+            const token1 = jwt.sign({
+                email : user_p[0].email
+            }, secretKey,{
+                expiresIn : '1h'
+            });
+            const token =String(token1);
+            const name = user[0].name;
+            const email = user[0].email;
+            return res.json({token, name, email});
+        }
+        else {
+            return res.json({token:'wrongpassword'});
+        }
+    }
+    else{
+        return res.json({token:'wrongemail'});
     }
 }
