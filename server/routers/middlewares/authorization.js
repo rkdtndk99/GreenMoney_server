@@ -1,13 +1,14 @@
 import jwt from "jsonwebtoken"
-import {secretKey} from "../config/secret.js"
+import {secretKey} from "../../config/secret.js"
 
 export const verifyToken = (req, res, next) => {
     try {
-        const clientToken = req.cookies.user;
-        const decoded = jwt.verify(clientToken, secretKey);
+        const {token}= req.body
+        const decoded = jwt.verify(token, secretKey);
         
         if (decoded) {
-            res.locals.userId = decoded.user_id;
+            res.locals.email = decoded.email;
+            res.locals.isParent = decoded.email;
             next();
         } 
         else {
