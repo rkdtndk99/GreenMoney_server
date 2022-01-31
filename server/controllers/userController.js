@@ -10,6 +10,7 @@ export const postParentJoin = async(req, res) => {
         return res.send('FAIL : 비밀번호 오류');
     }
     else{
+        
         const parentEmailExists = await Parent.exists({email});
         if(parentEmailExists){
             res.send('FAIL : 이미 가입된 이메일')
