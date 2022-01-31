@@ -57,14 +57,13 @@ export const parentLogin = async(req, res, next) => {
         const user_p = await Parent.find({email : email});
         if(user_p[0].password == pw){
             const token1 = jwt.sign({
-                email : user_p[0].email
+                email : user_p[0].email,
+                isParent: 1
             }, secretKey,{
                 expiresIn : '1h'
             });
             const token =String(token1);
-            const name = user[0].name;
-            const email = user[0].email;
-            return res.json({token, name, email});
+            return res.json({token});
         }
         else {
             return res.json({token:'wrongpassword'});
