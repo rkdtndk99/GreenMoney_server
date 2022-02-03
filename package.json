@@ -2,10 +2,11 @@
   "name": "greenmoney_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "init.js",
   "scripts": {
     "start": "nodemon npx babel-node server/init.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "swagger-autogen": "node server/swagger.js"
   },
   "repository": {
     "type": "git",
@@ -24,13 +25,16 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^6.0.7",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "swagger-autogen": "^2.18.8"
   },
   "devDependencies": {
     "@babel/core": "^7.15.4",
     "@babel/node": "^7.15.4",
     "@babel/preset-env": "^7.15.4",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0"
   },
   "type": "module"
 }
