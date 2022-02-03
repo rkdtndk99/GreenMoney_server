@@ -35,12 +35,9 @@ function checkMonth(mission){
 //mission저장할때 date정보 Mission에 date default에 있는걸로 저장할 것
 
 export const loadMonthMission = async (req, res) => {
-    const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
-    //email => token
-    // var base64Url = token.split('.')[1];
-    // var base64 = base64Url.replace('-', '+').replace('_', '/');
-    // const email = JSON.parse(atob(base64)).email
-    
+
+    const email = res.locals.email
+    const isParent = res.locals.email
     const yearMonth = moment().format('YYYY-MM')
 
     if(isParent){
@@ -60,11 +57,9 @@ export const loadMonthMission = async (req, res) => {
 
 
 export const loadAllMission = async (req, res) => {
-    const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
-    //email => token
-    // var base64Url = token.split('.')[1];
-    // var base64 = base64Url.replace('-', '+').replace('_', '/');
-    // const email = JSON.parse(atob(base64)).email
+    
+    const email = res.locals.email
+    const isParent = res.locals.email
 
     if(isParent){
         const user = await Parent.find({email:email});  
@@ -121,8 +116,8 @@ export const confirmMission = async (req,res) => {
 
 export const getPercent = async (req,res) => {
 
-    const {email, isParent} = req.body; //post로 token, isParent 넘겨줄 것
-    
+    const email = res.locals.email
+    const isParent = res.locals.email
     const yearMonth = moment().format('YYYY-MM')
 
     if(isParent){

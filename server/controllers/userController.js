@@ -58,7 +58,6 @@ export const parentLogin = async(req, res, next) => {
         if(user_p[0].password == pw){
             const token1 = jwt.sign({
                 email : user_p[0].email,
-                isParent : 1
             }, secretKey,{
                 expiresIn : '1h'
             });
@@ -82,7 +81,6 @@ export const childLogin = async(req, res, next) => {
         if(user_p[0].password == pw){
             const token1 = jwt.sign({
                 email : user_p[0].email,
-                isParent : 0
             }, secretKey,{
                 expiresIn : '1h'
             });
