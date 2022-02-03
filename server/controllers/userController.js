@@ -58,11 +58,12 @@ export const parentLogin = async(req, res, next) => {
         if(user_p[0].password == pw){
             const token1 = jwt.sign({
                 email : user_p[0].email,
+                isParent : 1
             }, secretKey,{
                 expiresIn : '1h'
             });
-            const token =String(token1);
-            return res.status(200).json({token});
+            const token = String(token1);
+            return res.status(200).json({token, isParent});
         }
         else {
             return res.status(400).json({token:'wrongpassword'});
@@ -77,15 +78,16 @@ export const childLogin = async(req, res, next) => {
     const{email, pw} = req.body;
     const childEmailExists = await Child.exists({email});
     if(childEmailExists){
-        const user_p = await Child.find({email : email});
-        if(user_p[0].password == pw){
+        const user_c = await Child.find({email : email});
+        if(user_c[0].password == pw){
             const token1 = jwt.sign({
-                email : user_p[0].email,
+                email : user_c[0].email,
+                isParent : 0
             }, secretKey,{
                 expiresIn : '1h'
             });
             const token =String(token1);
-            return res.status(200).json({token});
+            return res.status(200).json({token, isParent});
         }
         else {
             return res.status(400).json({token:'wrongpassword'});

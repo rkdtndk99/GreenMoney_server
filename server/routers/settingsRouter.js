@@ -1,8 +1,8 @@
 import express from "express"
-import {updateParent} from "../controllers/settingsController.js" 
+import {updateUser} from "../controllers/settingsController.js" 
 
 const settingsRouter = express.Router();
 
-settingsRouter.post('/parent',updateParent);
+settingsRouter.post('/updateUser',updateUser);
 
 export default settingsRouter;
