@@ -1,9 +1,9 @@
 import express from "express"
-import {updateParent, loadUser, loadMission, fixMission, loadMoney, fixMoney} from "../controllers/settingsController.js" 
+import {updateUser, loadUser, loadMission, fixMission, loadMoney, fixMoney} from "../controllers/settingsController.js" 
 
 const settingsRouter = express.Router();
 
-settingsRouter.post('/updateParent',updateParent);
+settingsRouter.post('/updateUser',updateUser);
 settingsRouter.post('/loadUser', loadUser);
 settingsRouter.post('/loadMission', loadMission);
 settingsRouter.post('/fixMission', fixMission);
