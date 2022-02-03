@@ -1,10 +1,10 @@
 import express from "express"
-import {updateUser} from "../controllers/settingsController.js" 
+import {loadUser, updateUser, loadMission, fixMission,loadMoney,fixMoney} from "../controllers/settingsController.js" 
 
 const settingsRouter = express.Router();
 
-settingsRouter.post('/updateUser',updateUser);
 settingsRouter.post('/loadUser', loadUser);
+settingsRouter.post('/updateUser',updateUser);
 settingsRouter.post('/loadMission', loadMission);
 settingsRouter.post('/fixMission', fixMission);
 settingsRouter.post('/loadMoney', loadMoney);
