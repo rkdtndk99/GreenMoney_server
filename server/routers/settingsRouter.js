@@ -3,6 +3,6 @@ import {updateParent} from "../controllers/settingsController.js"
 
 const settingsRouter = express.Router();
 
-settingsRouter.put('/settings/user',updateParent );
+settingsRouter.post('/parent',updateParent);
 
 export default settingsRouter;
