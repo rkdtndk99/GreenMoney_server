@@ -12,6 +12,6 @@ app.use(express.json());
 
 app.use("/mission", verifyToken, missionRouter);
 app.use("/user", userRouter);
-app.use("/settings", settingsRouter);
+app.use("/settings", verifyToken, settingsRouter);
 
 export default app;

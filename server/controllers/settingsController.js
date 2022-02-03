@@ -4,8 +4,9 @@ import Mission from "../models/Mission.js"
 import Money from "../models/Money.js"
 
 export const updateUser = async(req, res) => {
-    const isParent = res.locals.email
-    const {email, connectedEmail, phonenumber, password } = req.body;
+    const email = res.locals.email
+    const isParent = res.locals.isParent
+    const {connectedEmail, phonenumber, password } = req.body;
 
     if(isParent){
         const user_p = await Parent.find({email : email}); 
@@ -53,6 +54,7 @@ export  const loadUser = async(req,res) => {
 export const loadMission = async(req,rex) => {
     const email = req.locals.email
     const isParent = req.locals.isParent
+
     if(isParent){
         const user = await Parent.find({email:email});  
         const mission = await Mission.find({parentId: user[0]._id});
@@ -80,6 +82,7 @@ export const fixMission = async(req,res) => {
 }
 
 export const loadMoney = async(req,res) => {
+
     const email = req.locals.email;
     const isParent = req.locals.isParent;
 
@@ -96,7 +99,11 @@ export const loadMoney = async(req,res) => {
 }
 
 export const fixMoney = async(req,res) => {
-    const {email, isParent, maxMoney, paymentDate} = req.body;
+
+    const email = req.locals.email;
+    const isParent = req.locals.isParent;
+    const {maxMoney, paymentDate} = req.body;
+    
     if(isParent){
         const user = await Parent.find({email:email});  
         const money = await Money.find({parentId: user[0]._id});
