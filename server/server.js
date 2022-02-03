@@ -4,6 +4,7 @@ import userRouter from "./routers/userRouter.js"
 import {verifyToken} from "./routers/middlewares/authorization.js"
 
 const app = express();
+//const specs = swaggerJsdoc(swaggerOptions);
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
