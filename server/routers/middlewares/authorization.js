@@ -5,10 +5,9 @@ export const verifyToken = (req, res, next) => {
     try {
         const {token}= req.body
         const decoded = jwt.verify(token, secretKey);
-        
         if (decoded) {
             res.locals.email = decoded.email;
-            res.locals.isParent = decoded.email;
+            res.locals.isParent = decoded.isParent;
             next();
         } 
         else {
