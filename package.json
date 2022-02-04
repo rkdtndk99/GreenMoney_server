@@ -4,7 +4,7 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "nodemon npx babel-node server/init.js",
+    "start": "node server/init.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger-autogen": "node server/swagger.js"
   },
