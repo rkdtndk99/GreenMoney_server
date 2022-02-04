@@ -2,6 +2,7 @@ import Parent from "../models/Parent.js"
 import Child from "../models/Child.js"
 import Mission from "../models/Mission.js"
 import Money from "../models/Money.js"
+import moment from "moment";
 
 export const updateUser = async(req, res) => {
     const email = res.locals.email
@@ -82,17 +83,18 @@ export const fixMission = async(req,res) => {
 }
 
 export const createMission = async(req,res) => {
-    const email = req.locals.email;
-    const isParent = req.locals.isParent;
+    const email = res.locals.email;
+    const isParent = res.locals.isParent;
     const {missionTitle, deadline, compensation} = req.body;
-
+    
     if(isParent){
         const user = await Parent.find({email:email});  
         try{
+            const child = await Child.find({parentEmail:user[0].email})
             await Mission.create({
                 missionTitle, deadline, compensation, completed: 0, 
                 askForConfirm: 0, date: moment().format('YYYY-MM-DD'),
-                parentId: user[0]._id, childId: user[0].childId
+                parentId: user[0]._id, childId: child[0]._id
             });
             res.status(200).send('SUCCESS : mission 정보 저장 성공');
         }catch(error){
@@ -102,10 +104,11 @@ export const createMission = async(req,res) => {
     else{
         const user = await Child.find({email:email});
         try{
+            const parent = await Parent.find({childEmail:user[0].email})
             await Mission.create({
                 missionTitle, deadline, compensation, completed: 0, 
                 askForConfirm: 0, date: moment().format('YYYY-MM-DD'),
-                parentId: user[0].parentId, childId: user[0]._id
+                parentId: parent[0]._id, childId: user[0]._id
             });
             res.status(200).send('SUCCESS : mission 정보 저장 성공');
         }catch(error){

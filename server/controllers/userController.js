@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import {secretKey} from "../config/secret.js"
 
 
-export const ParentJoin = async(req, res) => {
+export const parentJoin = async(req, res) => {
     const {name, email, pw, verifypw, phonenumber, childEmail} = req.body; 
     if (pw != verifypw){
         return res.status(400).send('fail : 비밀번호 오류');
@@ -27,7 +27,7 @@ export const ParentJoin = async(req, res) => {
     }
 }
 
-export const ChildJoin = async(req, res) => {
+export const childJoin = async(req, res) => {
     const {name, email, pw, verifypw, phonenumber, parentEmail} = req.body; 
     if (pw != verifypw){
         return res.status(400).send('FAIL : 비밀번호 오류');

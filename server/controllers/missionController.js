@@ -17,15 +17,42 @@ function calculateMoney(mission){
     return earned
 }
 
-function checkMonth(mission){
+function createMonthInfo(mission){
     var month = new Set();
     
-    const length = mission.length
-    for(var i = 0; i<length; i++ ){
+    const missionLength = mission.length
+    for(var i = 0; i<missionLength; i++ ){
+        console.log('hi')
         var missionMonth = mission[i].date.split('-')[0] + '-' + mission[i].date.split('-')[1]
         month.add(missionMonth)
     }
-    return month
+    const arrMonth = Array.from(month);
+    const monthLength = arrMonth.length
+    
+    var summMonth = []
+
+    for(var i = 0; i<monthLength; i++ ){
+        summMonth.push([0,0,0])
+    }// 첫 칸은 완료미션 수 , 획득한 돈
+
+    for(var i = 0; i<missionLength; i++ ){
+        var index = arrMonth.indexOf(mission[i].date.split('-')[0] + '-' + mission[i].date.split('-')[1])
+        summMonth[index][2] += 1
+        if(mission[i].completed == 1){
+            summMonth[index][0] += 1
+            summMonth[index][1] += mission[i].compensation
+        }
+    }
+
+    for(var i = 0; i<monthLength; i++ ){
+        summMonth[index][0] = String(summMonth[index][0]) + "/" + String(summMonth[index][2])
+        summMonth[index].length = 2
+    }
+
+    const existMonth = JSON.stringify(arrMonth);
+    const monthInfo = JSON.stringify(summMonth);
+
+    return {existMonth, monthInfo}
 }
 
 
@@ -36,18 +63,18 @@ function checkMonth(mission){
 
 export const loadMonthMission = async (req, res) => {
 
-    const email = res.locals.email
-    const isParent = res.locals.email
-    const yearMonth = moment().format('YYYY-MM')
+    const email = res.locals.email;
+    const isParent = res.locals.isParent;
+    const month = req.body;
 
     if(isParent){
         const user = await Parent.find({email:email});
-        const mission = await Mission.find({parentId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
+        const mission = await Mission.find({parentId: user[0]._id ,date: {$regex: new RegExp(`${month}`)}});
         res.json(mission);
     }
     else{
         const user = await Child.find({email:email});
-        const mission = await Mission.find({childId: user[0]._id ,date: {$regex: new RegExp(`${yearMonth}`)}});
+        const mission = await Mission.find({childId: user[0]._id ,date: {$regex: new RegExp(`${month}`)}});
         res.json(mission);
     }
     // client 측에서 mission 받아서 뿌려줄 때 mission 마다 _id 값도 저장해놓아야
@@ -57,23 +84,23 @@ export const loadMonthMission = async (req, res) => {
 
 
 export const loadAllMission = async (req, res) => {
-    
+    console.log(res.locals.email);
     const email = res.locals.email
-    const isParent = res.locals.email
+    const isParent = res.locals.isParent
 
     if(isParent){
         const user = await Parent.find({email:email});  
         const mission = await Mission.find({parentId: user[0]._id});
-        const setMonth = checkMonth(mission);
-        const month = JSON.stringify([...setMonth]);
-        res.json({month,mission});
+        const monthInfo = createMonthInfo(mission);
+        console.log(monthInfo);
+        res.json(monthInfo);
     }
     else{
         const user = await Child.find({email:email});
         const mission = await Mission.find({childId: user[0]._id });
-        const setMonth = checkMonth(mission);
-        const month = JSON.stringify([...setMonth]);
-        res.json({month,mission});
+        const monthInfo = createMonthInfo(mission);
+        console.log(monthInfo);
+        res.json(monthInfo);
     }
 }
 
@@ -113,11 +140,10 @@ export const confirmMission = async (req,res) => {
 }   
 // verifyToken을 통해 검증된 후 진행
 
-
 export const getPercent = async (req,res) => {
 
     const email = res.locals.email
-    const isParent = res.locals.email
+    const isParent = res.locals.isParent
     const yearMonth = moment().format('YYYY-MM')
 
     if(isParent){
