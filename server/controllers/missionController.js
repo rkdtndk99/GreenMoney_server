@@ -86,12 +86,12 @@ export const askForConfirm = async (req,res) => {
         await Mission.update( {_id: id},
            {$set: {askForConfirm: 1}}
         );
+        return res.status(200).send('success');
     }
     catch(error){
         console.log('error 발생');
+        return res.status(400).send('fail');
     }
-
-    res.send("success");
 }   
 // verifyToken을 통해 검증된 후 진행
 
@@ -104,12 +104,12 @@ export const confirmMission = async (req,res) => {
         await Mission.update( {_id: id},
            {$set: {askForConfirm: 0, completed: 1}}
         );
+        return res.status(200).send('success');
     }
     catch(error){
         console.log('error 발생');
+        return res.status(400).send('fail');
     }
-
-    res.send("success");
 }   
 // verifyToken을 통해 검증된 후 진행
 

@@ -8,7 +8,7 @@ export const verifyToken = (req, res, next) => {
         
         if (decoded) {
             res.locals.email = decoded.email;
-            res.locals.isParent = decoded.email;
+            res.locals.isParent = decoded.isParent;
             next();
         } 
         else {

@@ -74,10 +74,10 @@ export const fixMission = async(req,res) => {
         await Mission.findByIdAndUpdate(id, 
             {$set: {missionTitle, deadline, compensation}}
         );
-        console.log('성공');
+        return res.status(200).send('success');
     }
     catch(error){
-        return res.status(400).send('FAIL : mission 정보 수정 실패');
+        return res.status(400).send('fail');
     }
 }
 
@@ -121,3 +121,4 @@ export const fixMoney = async(req,res) => {
         res.send('success');
     }
 }
+
