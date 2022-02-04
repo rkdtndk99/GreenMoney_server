@@ -1,9 +1,9 @@
 import "./db.js";
 import app from "./server.js"
 
-const PORT = 4000; //4000 포트 사용
+const PORT = 8080; //8080 포트 사용 for GCP
 
 const handleLsn = () => 
 console.log(`✅ Server listening on port http://localhost:${PORT}🚀`);
 
-app.listen(4000, handleLsn);
+app.listen(8080, handleLsn);
