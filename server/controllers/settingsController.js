@@ -15,10 +15,10 @@ export const updateUser = async(req, res) => {
             await Parent.findByIdAndUpdate(user_p[0]._id.toString(),  
                 {$set : {childEmail : connectedEmail, phonenumber, password}}
             );
-            return res.status(200).send('SUCCESS : parent 정보 수정 성공');
+            return res.status(200).send('success');
         }
         catch(error){
-            return res.status(400).send('FAIL : parent 정보 수정 실패');
+            return res.status(400).send('fail');
         }
     }
     else{
@@ -28,10 +28,10 @@ export const updateUser = async(req, res) => {
             await Child.findByIdAndUpdate(user_c[0]._id.toString(),  
                 {$set : {parentEmail : connectedEmail, phonenumber, password}}
             );
-            return res.status(200).send('SUCCESS : child 정보 수정 성공');
+            return res.status(200).send('success');
         }
         catch(error){
-            return res.status(400).send('FAIL : child 정보 수정 실패');
+            return res.status(400).send('fail');
         }
     }
 }
@@ -110,7 +110,7 @@ export const fixMoney = async(req,res) => {
         await Money.findByIdAndUpdate(money[0]._id, 
             {$set: {maxMoney, paymentDate}}
         );
-        res.send('success');
+        return res.status(200).send('success');
     }
     else{
         const user = await Child.find({email:email});
@@ -118,7 +118,7 @@ export const fixMoney = async(req,res) => {
         await Money.findByIdAndUpdate(money[0]._id, 
             {$set: {maxMoney, paymentDate}}
         );
-        res.send('success');
+        return res.status(200).send('success');
     }
 }
 
