@@ -58,14 +58,15 @@ export const parentLogin = async(req, res, next) => {
         const user_p = await Parent.find({email : email});
         if(user_p[0].password == pw){
             const isParent = 1
+            const name = user_p[0].name
             const token1 = jwt.sign({
                 email : user_p[0].email,
-                isParent
+                isParent,
             }, secretKey,{
                 expiresIn : '1h'
             });
             const token =String(token1);
-            return res.status(200).json({token, isParent});
+            return res.status(200).json({token, isParent, name});
         }
         else {
             return res.status(400).json({token:'wrongpassword'});
@@ -83,6 +84,7 @@ export const childLogin = async(req, res, next) => {
         const user_p = await Child.find({email : email});
         if(user_p[0].password == pw){
             const isParent = 0
+            const name = user_p[0].name
             const token1 = jwt.sign({
                 email : user_p[0].email,
                 isParent
@@ -90,7 +92,7 @@ export const childLogin = async(req, res, next) => {
                 expiresIn : '1h'
             });
             const token =String(token1);
-            return res.status(200).json({token, isParent});
+            return res.status(200).json({token, isParent, name});
         }
         else {
             return res.status(400).json({token:'wrongpassword'});
