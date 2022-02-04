@@ -7,7 +7,7 @@ import {secretKey} from "../config/secret.js"
 export const ParentJoin = async(req, res) => {
     const {name, email, pw, verifypw, phonenumber, childEmail} = req.body; 
     if (pw != verifypw){
-        return res.status(400).send('FAIL : 비밀번호 오류');
+        return res.status(400).send('fail : 비밀번호 오류');
     }
     else{
         const parentEmailExists = await Parent.exists({email});
