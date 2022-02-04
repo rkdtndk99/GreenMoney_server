@@ -81,6 +81,51 @@ export const fixMission = async(req,res) => {
     }
 }
 
+export const createMission = async(req,res) => {
+    const email = req.locals.email;
+    const isParent = req.locals.isParent;
+    const {missionTitle, deadline, compensation} = req.body;
+
+    if(isParent){
+        const user = await Parent.find({email:email});  
+        try{
+            await Mission.create({
+                missionTitle, deadline, compensation, completed: 0, 
+                askForConfirm: 0, date: moment().format('YYYY-MM-DD'),
+                parentId: user[0]._id, childId: user[0].childId
+            });
+            res.status(200).send('SUCCESS : mission 정보 저장 성공');
+        }catch(error){
+            res.status(400).send('FAIL : mission 정보 저장 실패');
+        }
+    }
+    else{
+        const user = await Child.find({email:email});
+        try{
+            await Mission.create({
+                missionTitle, deadline, compensation, completed: 0, 
+                askForConfirm: 0, date: moment().format('YYYY-MM-DD'),
+                parentId: user[0].parentId, childId: user[0]._id
+            });
+            res.status(200).send('SUCCESS : mission 정보 저장 성공');
+        }catch(error){
+            res.status(400).send('FAIL : mission 정보 저장 실패');
+        }
+    }
+}
+
+export const deleteMission = async(req,res) => {
+    const id = req.body;
+    try{
+        Mission.deleteOne({_id: id}, function(error){
+            if (error) return handleError(error);
+        })
+        return res.status(200).send('success');
+    }catch(error){
+        res.status(400).send('fail');
+    }
+}
+
 export const loadMoney = async(req,res) => {
 
     const email = req.locals.email;
