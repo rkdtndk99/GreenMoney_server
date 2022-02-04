@@ -52,6 +52,7 @@ export const childJoin = async(req, res) => {
 
 export const parentLogin = async(req, res, next) => {
     const{email, pw} = req.body;
+    console.log('dddd');
     const parentEmailExists = await Parent.exists({email});
     if(parentEmailExists){
         const user_p = await Parent.find({email : email});
